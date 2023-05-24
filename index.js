@@ -23,4 +23,14 @@ const anotacao1 = new Anotacao({
     conteudo: "Exemplo de anotação feita em sala"
 });
 
-Anotacao.create(anotacao1).then(console.log('Salvo'));
+// Anotacao.create(anotacao1).then(console.log('Salvo'));
+
+// listarTodos();
+
+async function listarTodos(){
+for await (const anotacao of Anotacao.find({autor:"João"},{_id:false, __v:false})) {
+        console.log(anotacao); 
+      }
+}
+
+Anotacao.deleteOne({ autor: 'João'}).then(console.log('Removido!'));
