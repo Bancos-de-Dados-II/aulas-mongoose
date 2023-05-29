@@ -25,12 +25,27 @@ const anotacao1 = new Anotacao({
 
 // Anotacao.create(anotacao1).then(console.log('Salvo'));
 
-// listarTodos();
+listarTodos();
 
 async function listarTodos(){
-for await (const anotacao of Anotacao.find({autor:"João"},{_id:false, __v:false})) {
+for await (const anotacao of Anotacao.find({},{_id:false, __v:false})) {
         console.log(anotacao); 
       }
 }
 
-Anotacao.deleteOne({ autor: 'João'}).then(console.log('Removido!'));
+// Anotacao.deleteOne({ autor: 'João'}).then(console.log('Removido!'));
+
+const obj = {
+  _id: "646e4146b8391bb8a8c3024f",
+  autor: 'João da Silva 2',
+  data: "2023-05-29",
+  conteudo: 'Exemplo de anotação feita em sala'
+}
+
+// atualizar(obj);
+
+async function atualizar(anotacao){
+  const obj = await Anotacao.findOne({_id: anotacao._id});
+  obj.overwrite(anotacao);
+  await obj.save().then(console.log('OK'));
+}
