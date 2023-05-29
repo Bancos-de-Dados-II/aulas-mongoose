@@ -14,6 +14,8 @@ const anotacaoSchema = new mongoose.Schema({
   conteudo: String  
 });
 
+anotacaoSchema.index({titulo:'text', conteudo:'text'},{default_language:'pt', weights:{titulo:2, conteudo:1}});
+
 const Anotacao = mongoose.model('Anotacao', anotacaoSchema);
 
 const anotacao1 = new Anotacao({
@@ -25,7 +27,7 @@ const anotacao1 = new Anotacao({
 
 // Anotacao.create(anotacao1).then(console.log('Salvo'));
 
-listarTodos();
+// listarTodos();
 
 async function listarTodos(){
 for await (const anotacao of Anotacao.find({},{_id:false, __v:false})) {
@@ -48,4 +50,10 @@ async function atualizar(anotacao){
   const obj = await Anotacao.findOne({_id: anotacao._id});
   obj.overwrite(anotacao);
   await obj.save().then(console.log('OK'));
+}
+
+buscarPorTexto('Aula');
+
+async function buscarPorTexto(texto){
+  Anotacao.find({$text:{$search:texto}}).then(r => console.log(r));
 }
